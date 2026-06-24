@@ -4,7 +4,7 @@ on:
   schedule:
     # Every Monday 8am AEST (Sunday 10pm UTC)
     - cron: '0 22 * * 0'
-  workflow_dispatch: # manual trigger from GitHub UI anytime
+  workflow_dispatch:
 
 jobs:
   send-reminder:
@@ -12,17 +12,7 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
-      - name: Set up Node
-        uses: actions/setup-node@v4
-        with:
-          node-version: '20'
-
-      - name: Install nodemailer
-        run: npm install nodemailer
-
       - name: Send weekly reminder email
         env:
-          GMAIL_USER: ${{ secrets.GMAIL_USER }}
-          GMAIL_APP_PASSWORD: ${{ secrets.GMAIL_APP_PASSWORD }}
-          TO_EMAIL: silas007@gmail.com
+          RESEND_API_KEY: ${{ secrets.RESEND_API_KEY }}
         run: node .github/scripts/send-reminder.js

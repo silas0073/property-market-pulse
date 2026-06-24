@@ -1,4 +1,4 @@
-const nodemailer = require('nodemailer');
+const https = require('https');
 
 const MUSWELLBROOK_FOR_SALE = 'https://www.realestate.com.au/buy/property-house-in-muswellbrook,+nsw+2333/list-1?maxBeds=3&includeSurrounding=false&activeSort=list-date';
 const MUSWELLBROOK_SOLD     = 'https://www.realestate.com.au/sold/property-house-in-muswellbrook,+nsw+2333/list-1?maxBeds=3&includeSurrounding=false&maxSoldAge=1-month&source=refinement';
@@ -6,11 +6,10 @@ const LALOR_FOR_SALE        = 'https://www.realestate.com.au/buy/property-house-
 const LALOR_SOLD            = 'https://www.realestate.com.au/sold/property-house-in-lalor-park,+nsw+2147/list-1?maxBeds=3&includeSurrounding=false&maxSoldAge=1-month&source=refinement';
 const CALCULATOR_URL        = 'https://propcheckpost.netlify.app';
 
-const now   = new Date();
+const now     = new Date();
 const dateStr = now.toLocaleDateString('en-AU', { weekday:'long', day:'numeric', month:'long', year:'numeric' });
 
-const html = `
-<!DOCTYPE html>
+const html = `<!DOCTYPE html>
 <html>
 <head>
 <meta charset="UTF-8"/>
@@ -41,7 +40,6 @@ const html = `
     <div class="date">Weekly snapshot — ${dateStr}</div>
   </div>
   <div class="body">
-
     <div class="instructions">
       <ol>
         <li>Click each REA link below and note the <strong>listing count</strong></li>
@@ -49,54 +47,65 @@ const html = `
         <li>Hit <strong>Calculate</strong> then <strong>Save Entry</strong></li>
       </ol>
     </div>
-
     <div class="step">
       <div class="step-label">Step 1 — Muswellbrook · 2333 · House · 3bd</div>
       <div class="location">Muswellbrook</div>
       <a class="btn btn-sale" href="${MUSWELLBROOK_FOR_SALE}">For Sale →</a>
       <a class="btn btn-sold" href="${MUSWELLBROOK_SOLD}">Sold 30d →</a>
     </div>
-
     <hr class="divider"/>
-
     <div class="step">
       <div class="step-label">Step 2 — Lalor Park · 2147 · House · 3bd</div>
       <div class="location">Lalor Park</div>
       <a class="btn btn-sale" href="${LALOR_FOR_SALE}">For Sale →</a>
       <a class="btn btn-sold" href="${LALOR_SOLD}">Sold 30d →</a>
     </div>
-
     <hr class="divider"/>
-
     <div class="step">
       <div class="step-label">Step 3 — Enter &amp; save</div>
       <a class="btn btn-calc" href="${CALCULATOR_URL}">Open Calculator →</a>
     </div>
-
   </div>
   <div class="footer">Sent automatically every Monday · Property Market Pulse · propcheckpost.netlify.app</div>
 </div>
 </body>
-</html>
-`;
+</html>`;
 
-async function main() {
-  const transporter = nodemailer.createTransport({
-    service: 'gmail',
-    auth: {
-      user: process.env.GMAIL_USER,
-      pass: process.env.GMAIL_APP_PASSWORD,
-    },
+function sendEmail() {
+  return new Promise((resolve, reject) => {
+    const payload = JSON.stringify({
+      from: 'Property Market Pulse <onboarding@resend.dev>',
+      to:   ['silas007@gmail.com'],
+      subject: `📊 Weekly Market Snapshot — ${dateStr}`,
+      html,
+    });
+
+    const req = https.request({
+      hostname: 'api.resend.com',
+      path:     '/emails',
+      method:   'POST',
+      headers:  {
+        'Authorization': `Bearer ${process.env.RESEND_API_KEY}`,
+        'Content-Type':  'application/json',
+        'Content-Length': Buffer.byteLength(payload),
+      },
+    }, res => {
+      let body = '';
+      res.on('data', d => body += d);
+      res.on('end', () => {
+        if (res.statusCode >= 200 && res.statusCode < 300) {
+          console.log('✅ Email sent:', body);
+          resolve();
+        } else {
+          reject(new Error(`Resend API error ${res.statusCode}: ${body}`));
+        }
+      });
+    });
+
+    req.on('error', reject);
+    req.write(payload);
+    req.end();
   });
-
-  await transporter.sendMail({
-    from: `"Property Market Pulse" <${process.env.GMAIL_USER}>`,
-    to:   process.env.TO_EMAIL,
-    subject: `📊 Weekly Market Snapshot — ${dateStr}`,
-    html,
-  });
-
-  console.log(`✅ Reminder sent to ${process.env.TO_EMAIL}`);
 }
 
-main().catch(e => { console.error('❌ Failed:', e.message); process.exit(1); });
+sendEmail().catch(e => { console.error('❌', e.message); process.exit(1); });
