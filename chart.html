@@ -69,7 +69,9 @@ function getLocKey(entry) {
 
 function parseDate(s) {
   const p = s.trim().split(' ');
-  return new Date(+p[2], MONTHS[p[1]], +p[0]);
+  // Handle both "Jun" and "June" style month names
+  const monthKey = p[1].slice(0,3);
+  return new Date(+p[2], MONTHS[monthKey], +p[0]);
 }
 
 function fmt(v, unit) {
