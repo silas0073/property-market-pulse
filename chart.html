@@ -1,0 +1,216 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Property Market Pulse — Trends</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet"/>
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:'Inter',sans-serif;background:#f0ede8;color:#0d0d0d;min-height:100vh;padding:32px 40px}
+h1{font-size:13px;font-weight:800;letter-spacing:.18em;text-transform:uppercase;color:#a07800;margin-bottom:4px}
+.back{font-size:11px;color:#888880;text-decoration:none;letter-spacing:.08em}
+.back:hover{color:#a07800}
+.card{background:#fff;border:1px solid #ccc8be;border-radius:2px;margin-top:20px;overflow:hidden}
+.card-header{background:#f5f3ef;border-bottom:1px solid #ccc8be;padding:14px 24px;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:10px}
+.card-title{font-size:11px;color:#888880;letter-spacing:.15em;text-transform:uppercase}
+.tabs{display:flex;gap:4px;flex-wrap:wrap}
+.tab{font-family:'Inter',sans-serif;font-size:11px;letter-spacing:.06em;padding:5px 12px;border-radius:2px;border:1px solid #ccc8be;background:#e8e4de;color:#555550;cursor:pointer;transition:all .15s}
+.tab:hover{border-color:#555550}
+.tab.active{background:#a07800;border-color:#a07800;color:#fff;font-weight:600}
+.loc-tabs{display:flex;gap:4px;padding:14px 24px 0;flex-wrap:wrap}
+.loc-tab{font-family:'Inter',sans-serif;font-size:12px;font-weight:700;letter-spacing:.06em;padding:6px 16px;border-radius:2px;border:1px solid #ccc8be;background:#e8e4de;color:#555550;cursor:pointer;transition:all .15s}
+.loc-tab.active{background:#a07800;border-color:#a07800;color:#fff}
+.chart-wrap{padding:20px 24px 16px;overflow-x:auto}
+.empty{text-align:center;padding:48px;color:#888880;font-size:13px;letter-spacing:.08em}
+.legend{padding:0 24px 16px;display:flex;align-items:center;gap:12px;flex-wrap:wrap}
+.legend-dot{width:10px;height:10px;border-radius:50%}
+.legend-item{display:flex;align-items:center;gap:6px;font-size:11px;color:#555550;letter-spacing:.05em}
+.no-data{color:#991f15;font-size:12px;padding:8px 24px 16px}
+</style>
+</head>
+<body>
+<a class="back" href="/">&larr; Back to Calculator</a>
+<h1 style="margin-top:10px">Property Market Pulse — Trends</h1>
+
+<div class="card">
+  <div class="card-header">
+    <span class="card-title">Metric</span>
+    <div class="tabs" id="metric-tabs"></div>
+  </div>
+  <div class="loc-tabs" id="loc-tabs"></div>
+  <div class="chart-wrap" id="chart-wrap"><div class="empty">Loading…</div></div>
+  <div class="legend" id="legend"></div>
+</div>
+
+<script>
+const TOKEN = 'pmp_history';
+const METRICS = [
+  {key:'absorption_rate', label:'Absorption Rate', unit:'%',  color:'#a07800', zones:[{v:25,label:'25%'},{v:50,label:'50%'}]},
+  {key:'months_supply',   label:'Months Supply',   unit:'mo', color:'#155c38', zones:[{v:2,label:'2mo'},{v:4,label:'4mo'}]},
+  {key:'for_sale',        label:'For Sale',        unit:'',   color:'#2a5fa0', zones:[]},
+  {key:'sold_30d',        label:'Sold 30d',        unit:'',   color:'#155c38', zones:[]},
+];
+const MONTHS = {Jan:0,Feb:1,Mar:2,Apr:3,May:4,Jun:5,Jul:6,Aug:7,Sep:8,Oct:9,Nov:10,Dec:11};
+
+let activeMetric = 'absorption_rate';
+let activeLoc = null;
+
+function getData() {
+  try { return JSON.parse(localStorage.getItem(TOKEN)||'[]'); } catch { return []; }
+}
+
+function getLocKey(entry) {
+  for (const l of ['Muswellbrook','Lalor Park']) {
+    if (entry.location && entry.location.includes(l)) return l;
+  }
+  return entry.location || '?';
+}
+
+function parseDate(s) {
+  const p = s.trim().split(' ');
+  return new Date(+p[2], MONTHS[p[1]], +p[0]);
+}
+
+function fmt(v, unit) {
+  if (v == null) return '—';
+  return unit === '%' ? v+'%' : unit === 'mo' ? v+'mo' : String(v);
+}
+
+function render() {
+  const raw = getData();
+  const metricTabsEl = document.getElementById('metric-tabs');
+  const locTabsEl    = document.getElementById('loc-tabs');
+  const chartWrap    = document.getElementById('chart-wrap');
+  const legendEl     = document.getElementById('legend');
+
+  // Build metric tabs
+  metricTabsEl.innerHTML = METRICS.map(m =>
+    `<button class="tab${m.key===activeMetric?' active':''}" data-key="${m.key}">${m.label}</button>`
+  ).join('');
+  metricTabsEl.querySelectorAll('.tab').forEach(b => b.addEventListener('click', () => {
+    activeMetric = b.dataset.key;
+    render();
+  }));
+
+  if (!raw.length) {
+    locTabsEl.innerHTML = '';
+    chartWrap.innerHTML = '<div class="empty">No saved entries yet — go to the calculator and save some results first.</div>';
+    legendEl.innerHTML = '';
+    return;
+  }
+
+  // Group by location
+  const byLoc = {};
+  for (const e of raw) {
+    const loc = getLocKey(e);
+    if (!byLoc[loc]) byLoc[loc] = [];
+    byLoc[loc].push(e);
+  }
+  for (const loc in byLoc) byLoc[loc].sort((a,b) => parseDate(a.date) - parseDate(b.date));
+
+  const locs = Object.keys(byLoc);
+  if (!activeLoc || !byLoc[activeLoc]) activeLoc = locs[0];
+
+  // Build loc tabs
+  if (locs.length > 1) {
+    locTabsEl.style.display = '';
+    locTabsEl.innerHTML = locs.map(l =>
+      `<button class="loc-tab${l===activeLoc?' active':''}" data-loc="${l}">${l}</button>`
+    ).join('');
+    locTabsEl.querySelectorAll('.loc-tab').forEach(b => b.addEventListener('click', () => {
+      activeLoc = b.dataset.loc;
+      render();
+    }));
+  } else {
+    locTabsEl.style.display = 'none';
+  }
+
+  const entries = byLoc[activeLoc] || [];
+  const metric  = METRICS.find(m => m.key === activeMetric);
+  const vals    = entries.map(e => e[metric.key]).filter(v => v != null && !isNaN(v));
+
+  if (!vals.length) {
+    chartWrap.innerHTML = '<div class="empty">No data for this metric in saved entries.</div>';
+    legendEl.innerHTML = '';
+    return;
+  }
+
+  // SVG dimensions
+  const W   = Math.max(560, entries.length * 96);
+  const H   = 200;
+  const PAD = {top:28, right:40, bottom:44, left:52};
+  const cW  = W - PAD.left - PAD.right;
+  const cH  = H - PAD.top  - PAD.bottom;
+
+  const minV = Math.min(...vals);
+  const maxV = Math.max(...vals);
+  const rng  = maxV - minV || 1;
+  const yMin = Math.max(0, minV - rng * 0.25);
+  const yMax = maxV + rng * 0.25;
+
+  const xPos = i  => PAD.left + (entries.length === 1 ? cW/2 : (i/(entries.length-1)) * cW);
+  const yPos = v  => PAD.top  + cH - ((v - yMin) / (yMax - yMin)) * cH;
+
+  const ticks = Array.from({length:5}, (_,i) => yMin + (yMax-yMin)*i/4);
+
+  let parts = [];
+
+  // Y grid + labels
+  for (const t of ticks) {
+    const y = yPos(t);
+    const label = metric.unit === '%' ? Math.round(t)+'%' : t.toFixed(1);
+    parts.push(`<line x1="${PAD.left}" y1="${y}" x2="${W-PAD.right}" y2="${y}" stroke="#e8e4de" stroke-width="1"/>`);
+    parts.push(`<text x="${PAD.left-8}" y="${y+4}" text-anchor="end" font-family="Inter,sans-serif" font-size="10" fill="#888880">${label}</text>`);
+  }
+
+  // Zone reference lines
+  for (const z of metric.zones) {
+    if (z.v < yMin || z.v > yMax) continue;
+    const zy = yPos(z.v);
+    parts.push(`<line x1="${PAD.left}" y1="${zy}" x2="${W-PAD.right}" y2="${zy}" stroke="#b8b4aa" stroke-width="1" stroke-dasharray="5,4"/>`);
+    parts.push(`<text x="${W-PAD.right+5}" y="${zy+4}" font-family="Inter,sans-serif" font-size="9" fill="#aaa898">${z.label}</text>`);
+  }
+
+  // Area fill
+  const validPts = entries
+    .map((e,i) => e[metric.key] != null ? [xPos(i), yPos(e[metric.key])] : null)
+    .filter(Boolean);
+
+  if (validPts.length > 1) {
+    const d = validPts.map((p,i) => (i===0?'M':'L')+p[0]+','+p[1]).join('') +
+      `L${validPts[validPts.length-1][0]},${PAD.top+cH}L${validPts[0][0]},${PAD.top+cH}Z`;
+    parts.push(`<path d="${d}" fill="${metric.color}" fill-opacity="0.08"/>`);
+  }
+
+  // Line
+  const linePts = entries.map((e,i) => e[metric.key] != null ? `${i===0?'M':'L'}${xPos(i)},${yPos(e[metric.key])}` : null).filter(Boolean);
+  if (linePts.length) {
+    parts.push(`<path d="${linePts.join('')}" fill="none" stroke="${metric.color}" stroke-width="2.5" stroke-linejoin="round" stroke-linecap="round"/>`);
+  }
+
+  // Dots + value labels + x-axis labels
+  entries.forEach((e, i) => {
+    const v = e[metric.key];
+    if (v == null) return;
+    const cx = xPos(i);
+    const cy = yPos(v);
+    parts.push(`<circle cx="${cx}" cy="${cy}" r="5" fill="${metric.color}" stroke="#fff" stroke-width="2"/>`);
+    parts.push(`<text x="${cx}" y="${cy-11}" text-anchor="middle" font-family="Inter,sans-serif" font-weight="700" font-size="11" fill="${metric.color}">${fmt(v, metric.unit)}</text>`);
+    parts.push(`<text x="${cx}" y="${H-4}" text-anchor="middle" font-family="Inter,sans-serif" font-size="9.5" fill="#888880">${e.date}</text>`);
+  });
+
+  chartWrap.innerHTML = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 ${W} ${H}" width="${W}" height="${H}" style="display:block;overflow:visible">${parts.join('')}</svg>`;
+
+  legendEl.innerHTML = `<div class="legend-item"><div class="legend-dot" style="background:${metric.color}"></div>${metric.label} · ${activeLoc} · ${entries.length} entries</div>`;
+}
+
+render();
+
+// Refresh if localStorage changes (e.g. new save from main tab)
+window.addEventListener('storage', render);
+let lastLen = getData().length;
+setInterval(() => { const d = getData(); if (d.length !== lastLen) { lastLen = d.length; render(); } }, 1000);
+</script>
+</body>
+</html>
