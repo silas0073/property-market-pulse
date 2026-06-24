@@ -549,9 +549,7 @@ Error generating stack: `+o.message+`
     transition: color 0.15s;
   }
 `,$d=[{label:"Muswellbrook · 2333",forSale:"https://www.realestate.com.au/buy/property-house-in-muswellbrook,+nsw+2333/list-1?maxBeds=3&includeSurrounding=false&activeSort=list-date",sold:"https://www.realestate.com.au/sold/property-house-in-muswellbrook,+nsw+2333/list-1?maxBeds=3&includeSurrounding=false&maxSoldAge=1-month&source=refinement"},{label:"Lalor Park · 2147",forSale:"https://www.realestate.com.au/buy/property-house-in-lalor-park,+nsw+2147/list-1?maxBeds=3&includeSurrounding=false&activeSort=list-date",sold:"https://www.realestate.com.au/sold/property-house-in-lalor-park,+nsw+2147/list-1?maxBeds=3&includeSurrounding=false&maxSoldAge=1-month&source=refinement"}];function Ud(){const[e,t]=ue.useState(Wu[0]),[n,r]=ue.useState("House"),[l,o]=ue.useState("3"),[i,u]=ue.useState(""),[s,c]=ue.useState(""),[v,h]=ue.useState(""),[m,w]=ue.useState(""),[g,S]=ue.useState(null),[M,f]=ue.useState(null),[a,d]=ue.useState(null),[y,E]=ue.useState(()=>{try{return JSON.parse(localStorage.getItem("pmp_history")||"[]")}catch{return[]}}),[C,z]=ue.useState(!1);function j(){const k=parseInt(i,10),b=parseInt(s,10);if(isNaN(k)||isNaN(b)||k<0||b<0)return;const kt=v?parseInt(v.replace(/[^0-9]/g,""),10):null,_=m?parseInt(m,10):null;let P=0,L=null;k>0&&b>0?(P=Math.round(b/k*1e3)/10,L=Math.round(k/b*10)/10):b>0&&k===0&&(P=100,L=0);const B={type:n,beds:l};S({for_sale:k,sold_30d:b,median_price:kt,median_dom:_,absorption_rate:P,months_supply:L}),f(new Date().toLocaleTimeString("en-AU",{hour:"2-digit",minute:"2-digit"})),d(B)}function A(){if(!g)return;const b=[{id:Date.now(),date:new Date().toLocaleDateString("en-AU",{day:"2-digit",month:"short",year:"numeric"}),time:new Date().toLocaleTimeString("en-AU",{hour:"2-digit",minute:"2-digit"}),location:`${e.label} · ${e.postcode}`,type:a==null?void 0:a.type,beds:a==null?void 0:a.beds,for_sale:g.for_sale,sold_30d:g.sold_30d,absorption_rate:g.absorption_rate,months_supply:g.months_supply,median_price:g.median_price,median_dom:g.median_dom,signal:g.months_supply<=2?"hot":g.months_supply<=4?"warm":"cold"},...y];E(b);try{localStorage.setItem("pmp_history",JSON.stringify(b))}catch{}z(!0)}function T(k){const b=y.filter(kt=>kt.id!==k);E(b);try{localStorage.setItem("pmp_history",JSON.stringify(b))}catch{}}function ge(k){t(k),S(null),u(""),c(""),h(""),w("")}const qe=g?Md(g.months_supply):null,wt=g?Math.min(100,g.absorption_rate):0,be=i!==""&&s!=="";return p.jsxs(p.Fragment,{children:[p.jsx("style",{children:Fd}),p.jsx("div",{className:"wrap",children:p.jsxs("div",{className:"card",children:[p.jsxs("div",{className:"header",children:[p.jsxs("div",{className:"title-row",children:[p.jsx("div",{className:"title",children:"Property Market Pulse"}),p.jsxs("div",{className:"version",children:["v",Rd]})]}),p.jsxs("div",{className:"controls-row",children:[p.jsxs("div",{className:"control-group",children:[p.jsx("span",{className:"control-label",children:"Location"}),p.jsx("div",{className:"toggle-group",children:Wu.map(k=>p.jsxs("button",{className:`toggle-btn location-btn${e.postcode===k.postcode?" active":""}`,onClick:()=>ge(k),children:[k.label," · ",k.postcode]},k.postcode))})]}),p.jsx("div",{className:"sep"}),p.jsxs("div",{className:"control-group",children:[p.jsx("span",{className:"control-label",children:"Type"}),p.jsx("div",{className:"toggle-group",children:Id.map(k=>p.jsx("button",{className:`toggle-btn${n===k?" active":""}`,onClick:()=>r(k),children:k},k))})]}),p.jsx("div",{className:"sep"}),p.jsxs("div",{className:"control-group",children:[p.jsx("span",{className:"control-label",children:"Beds"}),p.jsx("div",{className:"toggle-group",children:Od.map(k=>p.jsx("button",{className:`toggle-btn${l===k?" active":""}`,onClick:()=>o(k),children:k==="Any"?"Any":`${k}bd`},k))})]})]}),p.jsxs("div",{className:"input-row",children:[p.jsxs("div",{className:"input-group",children:[p.jsx("span",{className:"input-label",children:"For Sale"}),p.jsx("input",{className:"num-input",type:"number",min:"0",placeholder:"e.g. 20",value:i,onChange:k=>u(k.target.value),onKeyDown:k=>k.key==="Enter"&&be&&j()})]}),p.jsxs("div",{className:"input-group",children:[p.jsx("span",{className:"input-label",children:"Sold (30d)"}),p.jsx("input",{className:"num-input",type:"number",min:"0",placeholder:"e.g. 24",value:s,onChange:k=>c(k.target.value),onKeyDown:k=>k.key==="Enter"&&be&&j()})]}),p.jsxs("div",{className:"input-group",children:[p.jsx("span",{className:"input-label",children:"Median $ (optional)"}),p.jsx("input",{className:"num-input wide",type:"text",placeholder:"e.g. 575000",value:v,onChange:k=>h(k.target.value),onKeyDown:k=>k.key==="Enter"&&be&&j()})]}),p.jsxs("div",{className:"input-group",children:[p.jsx("span",{className:"input-label",children:"Days on Mkt (optional)"}),p.jsx("input",{className:"num-input",type:"number",min:"0",placeholder:"e.g. 37",value:m,onChange:k=>w(k.target.value),onKeyDown:k=>k.key==="Enter"&&be&&j()})]}),p.jsx("button",{className:"calc-btn",onClick:j,disabled:!be,children:"Calculate"}),p.jsx("span",{className:"input-hint",children:"Enter figures from REA or Domain then hit Calculate"})]})]}),!g&&p.jsxs("div",{className:"placeholder",children:[p.jsx("strong",{children:"How to use"}),"1. Select location, type & beds above",p.jsx("br",{}),"2. Search REA or Domain with matching filters",p.jsx("br",{}),"3. Enter the listing count + sold count + optional median price",p.jsx("br",{}),"4. Hit Calculate"]}),g&&p.jsxs("div",{className:"body",children:[p.jsxs("div",{className:"results-header",children:[p.jsxs("div",{children:[p.jsxs("div",{className:"suburb-name",children:[e.label," · ",e.postcode]}),p.jsxs("div",{className:"period-label",children:["calculated · ",M]})]}),p.jsxs("div",{className:"filter-badge",children:[p.jsxs("div",{children:["Type ",p.jsx("span",{children:a==null?void 0:a.type})]}),p.jsxs("div",{children:["Beds ",p.jsx("span",{children:(a==null?void 0:a.beds)==="Any"?"Any":`${a==null?void 0:a.beds}bd`})]})]})]}),p.jsxs("div",{className:"metrics",children:[p.jsxs("div",{className:"metric",children:[p.jsx("div",{className:"metric-label",children:"For Sale"}),p.jsx("div",{className:"metric-value highlight",children:g.for_sale}),p.jsx("div",{className:"metric-sub",children:"active listings"})]}),p.jsxs("div",{className:"metric",children:[p.jsx("div",{className:"metric-label",children:"Sold 30d"}),p.jsx("div",{className:"metric-value",children:g.sold_30d}),p.jsx("div",{className:"metric-sub",children:"last 30 days"})]}),p.jsxs("div",{className:"metric",children:[p.jsx("div",{className:"metric-label",children:"Months Supply"}),p.jsx("div",{className:`metric-value sm${g.months_supply!==null&&g.months_supply<=2?" green":""}`,children:g.months_supply!==null?g.months_supply:"—"}),p.jsx("div",{className:"metric-sub",children:"at current rate"})]}),p.jsxs("div",{className:"metric",children:[p.jsx("div",{className:"metric-label",children:"Median $"}),p.jsx("div",{className:`metric-value${(g.median_price||0)>=1e6?" sm":""}`,children:g.median_price?g.median_price>=1e6?`$${(g.median_price/1e6).toFixed(2)}m`:`$${Math.round(g.median_price/1e3)}k`:"—"}),p.jsx("div",{className:"metric-sub",children:"sale price"})]}),p.jsxs("div",{className:"metric",children:[p.jsx("div",{className:"metric-label",children:"Days on Mkt"}),p.jsx("div",{className:"metric-value sm",children:g.median_dom??"—"}),p.jsx("div",{className:"metric-sub",children:"median"})]})]}),p.jsxs("div",{className:"sell-thru-bar",children:[p.jsxs("div",{className:"bar-header",children:[p.jsx("span",{className:"bar-label",children:"Monthly Absorption Rate"}),p.jsxs("span",{className:"bar-pct",children:[g.absorption_rate,"%"]})]}),p.jsx("div",{className:"bar-track",children:p.jsx("div",{className:"bar-fill",style:{width:`${wt}%`}})}),p.jsxs("div",{className:"bar-zone",children:[p.jsx("span",{children:"SLOW <25%"}),p.jsx("span",{children:"BALANCED 25–50%"}),p.jsx("span",{children:"FAST >50%"})]})]}),p.jsxs("div",{className:"signal-row",children:[p.jsx("div",{className:`signal-dot ${qe.cls}`}),p.jsxs("div",{className:"signal-text",children:[qe.text,g.months_supply!==null&&p.jsxs("div",{className:"signal-sub",children:["Absorption ",g.absorption_rate,"% · ",g.months_supply," months supply",g.median_dom?` · ${g.median_dom}d avg on market`:""]})]})]}),p.jsx("div",{className:"divider"}),p.jsxs("div",{className:"source-row",children:[p.jsx("span",{className:"source-label",children:"Source: manually entered · realestate.com.au / domain.com.au"}),p.jsx("button",{className:"save-btn",onClick:A,children:"+ Save Entry"})]})]}),y.length>0&&p.jsxs("div",{className:"history-section",children:[p.jsxs("div",{className:"history-header",onClick:()=>z(k=>!k),children:[p.jsxs("span",{className:"ref-title",style:{margin:0},children:["Saved Entries (",y.length,")"]}),p.jsx("span",{className:"history-toggle",children:C?"▲ hide":"▼ show"})]}),C&&p.jsxs("div",{className:"history-table",children:[p.jsxs("div",{className:"ht-head",children:[p.jsx("span",{children:"Date"}),p.jsx("span",{children:"Location"}),p.jsx("span",{children:"Filters"}),p.jsx("span",{children:"For Sale"}),p.jsx("span",{children:"Sold 30d"}),p.jsx("span",{children:"Absorption"}),p.jsx("span",{children:"Mths Supply"}),p.jsx("span",{children:"Median $"}),p.jsx("span",{})]}),y.map(k=>p.jsxs("div",{className:"ht-row",children:[p.jsxs("span",{className:"ht-date",children:[k.date,p.jsx("br",{}),p.jsx("span",{style:{color:"#333"},children:k.time})]}),p.jsx("span",{children:k.location}),p.jsxs("span",{style:{color:"#555"},children:[k.type," · ",k.beds==="Any"?"Any":`${k.beds}bd`]}),p.jsx("span",{className:"ht-num",children:k.for_sale}),p.jsx("span",{className:"ht-num",children:k.sold_30d}),p.jsxs("span",{className:`ht-num ${k.signal==="hot"?"green":k.signal==="cold"?"red":"yellow"}`,children:[k.absorption_rate,"%"]}),p.jsx("span",{className:`ht-num ${k.signal==="hot"?"green":k.signal==="cold"?"red":"yellow"}`,children:k.months_supply??"—"}),p.jsx("span",{className:"ht-num",children:k.median_price?`$${Math.round(k.median_price/1e3)}k`:"—"}),p.jsx("button",{className:"ht-del",onClick:()=>T(k.id),title:"Delete",children:"×"})]},k.id))]})]}),p.jsxs("div",{className:"ref-section",children:[p.jsx("div",{className:"ref-title",children:"Data Sources · REA Search Links"}),p.jsx("div",{className:"ref-grid",children:$d.map(k=>p.jsxs("div",{className:"ref-card",children:[p.jsx("div",{className:"ref-location",children:k.label}),p.jsxs("div",{className:"ref-links",children:[p.jsxs("a",{href:k.forSale,target:"_blank",rel:"noopener noreferrer",className:"ref-link",children:[p.jsx("span",{className:"ref-tag sale",children:"For Sale"}),p.jsx("span",{className:"ref-url",children:k.forSale})]}),p.jsxs("a",{href:k.sold,target:"_blank",rel:"noopener noreferrer",className:"ref-link",children:[p.jsx("span",{className:"ref-tag sold",children:"Sold 30d"}),p.jsx("span",{className:"ref-url",children:k.sold})]})]})]},k.label))})]})]})})]})}Yl.createRoot(document.getElementById("root")).render(p.jsx(xc.StrictMode,{children:p.jsx(Ud,{})}));
-</script></body>
-</html>
-
+</script>
 <!-- PMP Chart Overlay v1.0 — injected, reads localStorage -->
 <style>
   .pmp-chart-panel {
@@ -649,33 +647,31 @@ Error generating stack: `+o.message+`
 (function() {
   const TOKEN = 'pmp_history';
   const METRICS = [
-    { key: 'absorption_rate', label: 'Absorption Rate', unit: '%', color: '#a07800', zone25: true },
+    { key: 'absorption_rate', label: 'Absorption Rate', unit: '%',  color: '#a07800', zone25: true },
     { key: 'months_supply',   label: 'Months Supply',   unit: 'mo', color: '#155c38', zone2: true },
     { key: 'for_sale',        label: 'For Sale',        unit: '',   color: '#2a5fa0' },
     { key: 'sold_30d',        label: 'Sold 30d',        unit: '',   color: '#155c38' },
   ];
-  const LOCS = ['Muswellbrook · 2333', 'Lalor Park · 2147'];
+  const LOCS = ['Muswellbrook', 'Lalor Park'];
 
   let activeMetric = 'absorption_rate';
-  let activeLoc = null; // null = both / first available
+  let activeLoc = null;
 
   function getData() {
     try { return JSON.parse(localStorage.getItem(TOKEN) || '[]'); } catch { return []; }
   }
 
   function getLocKey(entry) {
-    // location field is like "Muswellbrook · 2333 · 2333" or "Muswellbrook · 2333"
     for (const l of LOCS) {
-      if (entry.location && entry.location.startsWith(l.split(' ·')[0])) return l;
+      if (entry.location && entry.location.includes(l)) return l;
     }
     return entry.location || '?';
   }
 
   function parseDate(str) {
-    // "24 Jun 2026"
     const months = {Jan:0,Feb:1,Mar:2,Apr:3,May:4,Jun:5,Jul:6,Aug:7,Sep:8,Oct:9,Nov:10,Dec:11};
-    const [d, m, y] = str.split(' ');
-    return new Date(+y, months[m], +d);
+    const parts = str.split(' ');
+    return new Date(+parts[2], months[parts[1]], +parts[0]);
   }
 
   function buildChart() {
@@ -689,14 +685,12 @@ Error generating stack: `+o.message+`
       return;
     }
 
-    // Group by location
     const byLoc = {};
     for (const e of raw) {
       const loc = getLocKey(e);
       if (!byLoc[loc]) byLoc[loc] = [];
       byLoc[loc].push(e);
     }
-    // Sort each location by date asc
     for (const loc in byLoc) {
       byLoc[loc].sort((a, b) => parseDate(a.date) - parseDate(b.date));
     }
@@ -704,7 +698,6 @@ Error generating stack: `+o.message+`
     const availLocs = Object.keys(byLoc);
     if (!activeLoc || !byLoc[activeLoc]) activeLoc = availLocs[0];
 
-    // Rebuild loc tabs
     const locTabsEl = panel.querySelector('.pmp-chart-loc-tabs');
     if (availLocs.length > 1) {
       locTabsEl.style.display = '';
@@ -721,9 +714,8 @@ Error generating stack: `+o.message+`
     const entries = byLoc[activeLoc] || [];
     const metric = METRICS.find(m => m.key === activeMetric);
     const values = entries.map(e => e[metric.key]);
-    const labels = entries.map(e => e.date);
-
     const validVals = values.filter(v => v !== null && v !== undefined);
+
     if (validVals.length === 0) {
       panel.querySelector('.pmp-chart-wrap').innerHTML = '<div class="pmp-chart-empty">No data for this metric in saved entries</div>';
       panel.querySelector('.pmp-chart-legend').innerHTML = '';
@@ -732,7 +724,7 @@ Error generating stack: `+o.message+`
 
     const W = Math.max(500, entries.length * 72);
     const H = 180;
-    const PAD = { top: 20, right: 20, bottom: 36, left: 44 };
+    const PAD = { top: 20, right: 30, bottom: 36, left: 44 };
     const cW = W - PAD.left - PAD.right;
     const cH = H - PAD.top - PAD.bottom;
 
@@ -743,96 +735,73 @@ Error generating stack: `+o.message+`
     const yMin = Math.max(0, minV - vPad);
     const yMax = maxV + vPad;
 
-    function xPos(i) { return PAD.left + (entries.length === 1 ? cW / 2 : (i / (entries.length - 1)) * cW); }
-    function yPos(v) { return PAD.top + cH - ((v - yMin) / (yMax - yMin)) * cH; }
+    const xPos = i => PAD.left + (entries.length === 1 ? cW / 2 : (i / (entries.length - 1)) * cW);
+    const yPos = v => PAD.top + cH - ((v - yMin) / (yMax - yMin)) * cH;
 
-    // Y axis ticks
-    const tickCount = 4;
-    const ticks = Array.from({length: tickCount + 1}, (_, i) => yMin + (yMax - yMin) * i / tickCount);
+    const ticks = Array.from({length: 5}, (_, i) => yMin + (yMax - yMin) * i / 4);
+    let svg = [`<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 ${W} ${H}" width="${W}" height="${H}" style="display:block;overflow:visible">`];
 
-    let svgParts = [`<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 ${W} ${H}" width="${W}" height="${H}" style="display:block;overflow:visible">`];
-
-    // Grid lines
+    // Grid + Y labels
     for (const tick of ticks) {
       const y = yPos(tick);
-      svgParts.push(`<line x1="${PAD.left}" y1="${y}" x2="${W - PAD.right}" y2="${y}" stroke="#e8e4de" stroke-width="1"/>`);
-      const label = metric.unit === '%' ? tick.toFixed(0) + '%' : tick.toFixed(1);
-      svgParts.push(`<text x="${PAD.left - 6}" y="${y + 4}" text-anchor="end" font-family="Inter,sans-serif" font-size="9.5" fill="#888880">${label}</text>`);
+      svg.push(`<line x1="${PAD.left}" y1="${y}" x2="${W - PAD.right}" y2="${y}" stroke="#e8e4de" stroke-width="1"/>`);
+      const lbl = metric.unit === '%' ? tick.toFixed(0) + '%' : tick.toFixed(1);
+      svg.push(`<text x="${PAD.left - 6}" y="${y + 4}" text-anchor="end" font-family="Inter,sans-serif" font-size="9.5" fill="#888880">${lbl}</text>`);
     }
 
-    // Zone lines
+    // Zone reference lines
     if (metric.zone25) {
-      // 25% and 50% reference lines
       for (const zv of [25, 50]) {
         if (zv >= yMin && zv <= yMax) {
           const zy = yPos(zv);
-          svgParts.push(`<line x1="${PAD.left}" y1="${zy}" x2="${W - PAD.right}" y2="${zy}" stroke="#ccc8be" stroke-width="1" stroke-dasharray="4,3"/>`);
-          svgParts.push(`<text x="${W - PAD.right + 4}" y="${zy + 4}" font-family="Inter,sans-serif" font-size="9" fill="#aaa">${zv}%</text>`);
+          svg.push(`<line x1="${PAD.left}" y1="${zy}" x2="${W - PAD.right}" y2="${zy}" stroke="#ccc8be" stroke-width="1" stroke-dasharray="4,3"/>`);
+          svg.push(`<text x="${W - PAD.right + 4}" y="${zy + 4}" font-family="Inter,sans-serif" font-size="9" fill="#aaa898">${zv}%</text>`);
         }
       }
     }
     if (metric.zone2) {
-      for (const [zv, zlabel] of [[2,'hot'],[4,'warm']]) {
+      for (const [zv] of [[2],[4]]) {
         if (zv >= yMin && zv <= yMax) {
           const zy = yPos(zv);
-          svgParts.push(`<line x1="${PAD.left}" y1="${zy}" x2="${W - PAD.right}" y2="${zy}" stroke="#ccc8be" stroke-width="1" stroke-dasharray="4,3"/>`);
-          svgParts.push(`<text x="${W - PAD.right + 4}" y="${zy + 4}" font-family="Inter,sans-serif" font-size="9" fill="#aaa">${zv}mo</text>`);
+          svg.push(`<line x1="${PAD.left}" y1="${zy}" x2="${W - PAD.right}" y2="${zy}" stroke="#ccc8be" stroke-width="1" stroke-dasharray="4,3"/>`);
+          svg.push(`<text x="${W - PAD.right + 4}" y="${zy + 4}" font-family="Inter,sans-serif" font-size="9" fill="#aaa898">${zv}mo</text>`);
         }
       }
     }
 
     // Area fill
     if (entries.length > 1) {
-      const pts = entries.map((e, i) => {
-        const v = e[metric.key];
-        return v !== null && v !== undefined ? `${xPos(i)},${yPos(v)}` : null;
-      }).filter(Boolean);
-      if (pts.length > 1) {
-        const first = pts[0].split(',');
-        const last = pts[pts.length - 1].split(',');
-        const areaPath = `M${pts.join('L')}L${last[0]},${PAD.top + cH}L${first[0]},${PAD.top + cH}Z`;
-        svgParts.push(`<path d="${areaPath}" fill="${metric.color}" fill-opacity="0.08"/>`);
+      const validPts = entries.map((e, i) => e[metric.key] != null ? `${xPos(i)},${yPos(e[metric.key])}` : null).filter(Boolean);
+      if (validPts.length > 1) {
+        const f = validPts[0].split(','), l = validPts[validPts.length-1].split(',');
+        svg.push(`<path d="M${validPts.join('L')}L${l[0]},${PAD.top+cH}L${f[0]},${PAD.top+cH}Z" fill="${metric.color}" fill-opacity="0.08"/>`);
       }
     }
 
     // Line
-    let linePath = '';
+    let path = '';
+    entries.forEach((e, i) => { if (e[metric.key] != null) path += (path ? 'L' : 'M') + `${xPos(i)},${yPos(e[metric.key])}`; });
+    if (path) svg.push(`<path d="${path}" fill="none" stroke="${metric.color}" stroke-width="2" stroke-linejoin="round" stroke-linecap="round"/>`);
+
+    // Dots + value labels + x labels
     entries.forEach((e, i) => {
       const v = e[metric.key];
-      if (v === null || v === undefined) return;
-      linePath += (linePath === '' ? 'M' : 'L') + `${xPos(i)},${yPos(v)}`;
-    });
-    if (linePath) svgParts.push(`<path d="${linePath}" fill="none" stroke="${metric.color}" stroke-width="2" stroke-linejoin="round" stroke-linecap="round"/>`);
-
-    // Dots + labels
-    entries.forEach((e, i) => {
-      const v = e[metric.key];
-      if (v === null || v === undefined) return;
-      const cx = xPos(i);
-      const cy = yPos(v);
-      svgParts.push(`<circle cx="${cx}" cy="${cy}" r="4" fill="${metric.color}" stroke="#fff" stroke-width="1.5"/>`);
-      const valLabel = metric.unit === '%' ? v + '%' : metric.unit === 'mo' ? v + 'mo' : v;
-      svgParts.push(`<text x="${cx}" y="${cy - 9}" text-anchor="middle" font-family="Inter,sans-serif" font-weight="700" font-size="10.5" fill="${metric.color}">${valLabel}</text>`);
+      if (v == null) return;
+      const cx = xPos(i), cy = yPos(v);
+      svg.push(`<circle cx="${cx}" cy="${cy}" r="4" fill="${metric.color}" stroke="#fff" stroke-width="1.5"/>`);
+      const vl = metric.unit === '%' ? v + '%' : metric.unit === 'mo' ? v + 'mo' : v;
+      svg.push(`<text x="${cx}" y="${cy - 9}" text-anchor="middle" font-family="Inter,sans-serif" font-weight="700" font-size="10.5" fill="${metric.color}">${vl}</text>`);
+      svg.push(`<text x="${cx}" y="${H - 4}" text-anchor="middle" font-family="Inter,sans-serif" font-size="9.5" fill="#888880">${e.date}</text>`);
     });
 
-    // X axis labels
-    entries.forEach((e, i) => {
-      const cx = xPos(i);
-      svgParts.push(`<text x="${cx}" y="${H - 4}" text-anchor="middle" font-family="Inter,sans-serif" font-size="9.5" fill="#888880">${e.date}</text>`);
-    });
-
-    svgParts.push('</svg>');
-
-    panel.querySelector('.pmp-chart-wrap').innerHTML = svgParts.join('');
-
-    // Legend
+    svg.push('</svg>');
+    panel.querySelector('.pmp-chart-wrap').innerHTML = svg.join('');
     panel.querySelector('.pmp-chart-legend').innerHTML =
       `<div class="pmp-legend-item"><div class="pmp-legend-dot" style="background:${metric.color}"></div>${metric.label} — ${activeLoc}</div>`;
   }
 
   function injectPanel() {
     if (document.getElementById('pmp-chart-panel')) { buildChart(); return; }
-
     const histSection = document.querySelector('.history-section');
     if (!histSection) return;
 
@@ -850,8 +819,6 @@ Error generating stack: `+o.message+`
       <div class="pmp-chart-wrap"></div>
       <div class="pmp-chart-legend"></div>
     `;
-
-    // Insert before history-section
     histSection.parentNode.insertBefore(panel, histSection);
 
     panel.querySelectorAll('.pmp-chart-tab').forEach(btn => {
@@ -861,23 +828,21 @@ Error generating stack: `+o.message+`
         buildChart();
       });
     });
-
     buildChart();
   }
 
-  // Watch for React to render history section
   const observer = new MutationObserver(() => {
     if (document.querySelector('.history-section')) injectPanel();
   });
   observer.observe(document.getElementById('root'), { childList: true, subtree: true });
 
-  // Also re-render chart when localStorage changes (new entry saved)
   window.addEventListener('storage', () => buildChart());
-  // Poll for new saves within same tab (storage event doesn't fire same-tab)
   let lastLen = 0;
   setInterval(() => {
-    const data = getData();
-    if (data.length !== lastLen) { lastLen = data.length; injectPanel(); }
+    const d = getData();
+    if (d.length !== lastLen) { lastLen = d.length; injectPanel(); }
   }, 800);
 })();
 </script>
+</body>
+</html>
