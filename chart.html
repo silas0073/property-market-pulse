@@ -60,6 +60,24 @@ function getData() {
   try { return JSON.parse(localStorage.getItem(TOKEN)||'[]'); } catch { return []; }
 }
 
+// Load cloud history on start and merge into localStorage
+function loadCloud() {
+  fetch('/api/get-history')
+    .then(r => r.ok ? r.json() : [])
+    .then(cloud => {
+      if (!cloud.length) return;
+      let local = getData();
+      const localIds = new Set(local.map(e => e.id));
+      const toAdd = cloud.filter(e => !localIds.has(e.id));
+      if (toAdd.length) {
+        const merged = [...local, ...toAdd].sort((a,b) => new Date(b.date) - new Date(a.date));
+        localStorage.setItem(TOKEN, JSON.stringify(merged));
+        render();
+      }
+    })
+    .catch(() => {});
+}
+
 function getLocKey(entry) {
   for (const l of ['Muswellbrook','Lalor Park']) {
     if (entry.location && entry.location.includes(l)) return l;
@@ -208,6 +226,7 @@ function render() {
 }
 
 render();
+loadCloud();
 
 // Refresh if localStorage changes (e.g. new save from main tab)
 window.addEventListener('storage', render);

@@ -7,6 +7,12 @@
 [functions."median"]
   timeout = 20
 
+[functions."save-entry"]
+  timeout = 15
+
+[functions."get-history"]
+  timeout = 10
+
 [[redirects]]
   from = "/api/search"
   to = "/.netlify/functions/search"
@@ -15,6 +21,16 @@
 [[redirects]]
   from = "/api/median"
   to = "/.netlify/functions/median"
+  status = 200
+
+[[redirects]]
+  from = "/api/save-entry"
+  to = "/.netlify/functions/save-entry"
+  status = 200
+
+[[redirects]]
+  from = "/api/get-history"
+  to = "/.netlify/functions/get-history"
   status = 200
 
 [[redirects]]
