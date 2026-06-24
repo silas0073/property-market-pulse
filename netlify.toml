@@ -1,0 +1,23 @@
+[build]
+  functions = "netlify/functions"
+
+[functions."search"]
+  timeout = 26
+
+[functions."median"]
+  timeout = 20
+
+[[redirects]]
+  from = "/api/search"
+  to = "/.netlify/functions/search"
+  status = 200
+
+[[redirects]]
+  from = "/api/median"
+  to = "/.netlify/functions/median"
+  status = 200
+
+[[redirects]]
+  from = "/*"
+  to = "/index.html"
+  status = 200
