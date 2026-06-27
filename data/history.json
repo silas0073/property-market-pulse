@@ -1,1 +1,18 @@
-[]
+[
+  {
+    "id": 1782550428713,
+    "date": "27 Jun 2026",
+    "time": "06:53 pm",
+    "location": "Muswellbrook · 2333",
+    "type": "House",
+    "beds": "3",
+    "for_sale": 18,
+    "sold_30d": 13,
+    "absorption_rate": 72.2,
+    "months_supply": 1.4,
+    "median_price": null,
+    "median_dom": null,
+    "signal": "hot",
+    "source": "manual"
+  }
+]
